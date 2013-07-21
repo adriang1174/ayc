@@ -3,6 +3,30 @@ jQuery(document).ready(function()
 	{
 		var lastsel2
 		jQuery('#menu1').ptMenu();
+		$( "#fechad" ).datepicker({dateFormat: 'yy-mm-dd'});
+		$( "#fechah" ).datepicker({dateFormat: 'yy-mm-dd'});
+		$( "#subm" ).button();
+		$( "#subm" ).click(function(){
+													var form_data = {
+																		fechad: $("#fechad").val(),
+																		fechah: $("#fechah").val(),																		
+																		ids: $("#ids").val(),
+																	};
+													jQuery.ajax({
+																				type: "POST",
+																				url: 'model/dbfechasvigencia.php',
+																				data: form_data,
+																				success: function(response)
+																				{
+																						if(response == 'OK')
+																						{
+																							$("#message").html("<p class='ui-state-highlight'>Vigencia actualizada exitosamente!</p>");
+																							  $("#EMPLEADOS").jqGrid("setGridParam",{datatype:"json",loadonce: false}).trigger("reloadGrid");
+																						}
+																				}
+																}) ;
+										});
+
 		jQuery("#PROVEEDORES").jqGrid(
 		{
 			height: 'auto',
@@ -46,6 +70,11 @@ jQuery(document).ready(function()
 							jQuery("#EMPLEADOS").jqGrid('setCaption',"Empleados de: "+ret.Proveedor)
 							.trigger('reloadGrid');			
 						}
+				},
+			
+			gridComplete: function () 
+				{
+                $('#count').html($('#PROVEEDORES').jqGrid('getGridParam','records'));
 				}
 		});
 
@@ -57,7 +86,7 @@ jQuery(document).ready(function()
                         {multipleSearch:true, multipleGroup:true, resize: true, drag: true, closeOnEscape: true, closeAfterReset: true, closeAfterSearch:true} // search options
                 );
 
-	
+		$("#dialog-form2").hide("fast");
 	
 	jQuery("#EMPLEADOS").jqGrid(
 		{
@@ -79,6 +108,7 @@ jQuery(document).ready(function()
 		editurl: 'model/dbempleados.php',
     		caption: 'Empleados',
 		height: 'auto',
+		multiselect: true,
  	}); 
 
 	jQuery("#EMPLEADOS").jqGrid('navGrid',"#EMPLEADOSpager",
@@ -88,6 +118,8 @@ jQuery(document).ready(function()
 		{reloadAfterSubmit: true}, //del options
 		{multipleSearch:true, multipleGroup:true, resize: true, drag: true, closeOnEscape: true, closeAfterReset: true, closeAfterSearch:true} // search options
 	);
+	
+
 	
 });
 

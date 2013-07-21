@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 21-07-2013 a las 16:25:41
+-- Tiempo de generación: 21-07-2013 a las 16:29:45
 -- Versión del servidor: 5.1.61-0+squeeze1
 -- Versión de PHP: 5.3.3-7+squeeze8
 
@@ -17,7 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Base de datos: `mydb`
+-- Base de datos: `mydb2`
 --
 
 -- --------------------------------------------------------
@@ -147,22 +147,6 @@ CREATE TABLE IF NOT EXISTS `empresas` (
   KEY `Usuario` (`Usuario`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=12 ;
 
---
--- Disparadores `empresas`
---
-DROP TRIGGER IF EXISTS `empresas_Trigger`;
-DELIMITER //
-CREATE TRIGGER `empresas_Trigger` BEFORE INSERT ON `empresas`
- FOR EACH ROW BEGIN
-	declare v_idusuario INT;
-	insert into usuarios (usuario,clave) values(new.Empresa,CONCAT(new.Empresa, '123'));
-	SELECT LAST_INSERT_ID() INTO v_idusuario; 
-	insert into usuariosPerfiles (idusuario,idperfil) values(v_idusuario,1);
-  set new.usuarios_idusuario =  v_idusuario;
-END
-//
-DELIMITER ;
-
 -- --------------------------------------------------------
 
 --
@@ -223,22 +207,6 @@ CREATE TABLE IF NOT EXISTS `proveedores` (
   KEY `IdEmpresa` (`IdEmpresa`),
   KEY `fk_proveedores_usuarios1` (`usuarios_idusuario`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=255 ;
-
---
--- Disparadores `proveedores`
---
-DROP TRIGGER IF EXISTS `proveedores_Trigger`;
-DELIMITER //
-CREATE TRIGGER `proveedores_Trigger` BEFORE INSERT ON `proveedores`
- FOR EACH ROW BEGIN
-	declare v_idusuario INT;
-	insert into usuarios (usuario,clave) values(new.Proveedor,CONCAT(new.Proveedor, '123'));
-	SELECT LAST_INSERT_ID() INTO v_idusuario; 
-	insert into usuariosPerfiles (idusuario,idperfil) values(v_idusuario,2);
-  SET new.usuarios_idusuario = v_idusuario;
-END
-//
-DELIMITER ;
 
 -- --------------------------------------------------------
 

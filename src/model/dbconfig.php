@@ -1,9 +1,6 @@
 <?php
 $dbhost = "localhost";
-$dbuser = "dbayc";
-$dbpassword = "ayc*123";
+$dbuser = "root";
+$dbpassword = "ave*2012";
 $database = "mydb";
-
-// Indicate if shows var_dumps
-$debug = 1;
 ?>

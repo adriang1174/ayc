@@ -1,6 +1,4 @@
 <?php
-session_start();
-
 include("dbconfig.php");
 include("wherequery.php");
 
@@ -13,8 +11,8 @@ $sord = $_GET['sord']; // get the direction
 $id = $_GET['id'];
 $oper = $_REQUEST['oper'];
 //Este debería tomarlo de sesion con el login
-$idEmpresa = $_SESSION['empresa'];
-$idUsuario = $_SESSION['u_id'];
+$idEmpresa = 1;
+$idUsuario = 1;
 
 if(!$sidx) $sidx =1;
 if(!$limit) $limit =1;
@@ -29,7 +27,7 @@ mysql_select_db($database) or die("Error conecting to db.");
                       $NombreProv = $_REQUEST['Proveedor'];
                       $query= "INSERT INTO proveedores (idEmpresa,Proveedor,Identificacion,DenunciaCC,RiesgoFin,usuarios_idusuario) VALUES(".$idEmpresa.",'" .$NombreProv ."','".$_REQUEST['Identificacion']."','".$_REQUEST['DenunciaCC']."','".$_REQUEST['RiesgoFin']."',".$idUsuario.")";
                       $result=mysql_query($query);
-					  if($debug == 1)	var_dump($query);
+					  					var_dump($query);
                       //$row = mysql_fetch_array($result,MYSQL_ASSOC); SOLO PARA SELECT
 		}
 	else if($oper === "edit") 
@@ -42,14 +40,14 @@ mysql_select_db($database) or die("Error conecting to db.");
                       																RiesgoFin = '".$_REQUEST['RiesgoFin']."'  
                       				WHERE Idproveedor = ".$idProv;
                       $result=mysql_query($query);
-                      if($debug == 1) var_dump($query);
+                      var_dump($query);
 		}
 	else if($oper === "del") 
 		{
                       $idCountry = $_REQUEST['id'];
                       $query= "DELETE FROM proveedores WHERE IdProveedor = ".$idCountry;
                       $result=mysql_query($query);
-                      if($debug == 1) var_dump($query);
+                      var_dump($query);
 		}
 
 	else
@@ -69,8 +67,7 @@ mysql_select_db($database) or die("Error conecting to db.");
 
 			if ($start<0) $start = 0;
 
-			$SQL = $SQL = "SELECT * FROM proveedores WHERE IdEmpresa = ".$idEmpresa .$wh. " ORDER BY $sidx $sord LIMIT $start , $limit"; 
-			//var_dump($SQL);
+			$SQL = $SQL = "SELECT * FROM proveedores WHERE TRUE " .$wh. " ORDER BY $sidx $sord LIMIT $start , $limit"; 
 			$result = mysql_query( $SQL ) or die("Couldn?t execute query.".mysql_error());
 	        	$responce->page = $page;
 		        $responce->total = $total_pages;

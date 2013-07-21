@@ -9,7 +9,28 @@ jQuery(document).ready(function()
 		var lastsel2
 		var prov = <?php echo json_encode($prov); ?>;
 		jQuery('#menu1').ptMenu();
-	
+		$( "#datepicker" ).datepicker();
+		$( "#subm" ).button();
+		$( "#subm" ).click(function(){
+													var form_data = {
+																		fecha: $("#datepicker").val(),
+																		ids: $("#ids").val(),
+																	};
+													jQuery.ajax({
+																				type: "POST",
+																				url: 'model/dbfechasvigencia.php',
+																				data: form_data,
+																				success: function(response)
+																				{
+																						if(response == 'OK')
+																						{
+																							$("#message").html("<p class='ui-state-highlight'>Vigencia actualizada exitosamente!</p>");
+																						}
+																				}
+																}) ;
+										});
+
+		$("#dialog-form2").hide("fast");
 	jQuery("#EMPLEADOS").jqGrid(
 		{
 		height: 'auto',
@@ -31,6 +52,7 @@ jQuery(document).ready(function()
     		caption: 'Empleados',
 		height: 'auto',
 		edit: {recreateForm: true},
+		multiselect: true,
 	}); 
 
 	jQuery("#EMPLEADOS").jqGrid('navGrid',"#EMPLEADOSpager",

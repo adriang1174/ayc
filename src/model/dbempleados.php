@@ -1,6 +1,4 @@
 <?php
-session_start();
-
 include("dbconfig.php");
 include("wherequery.php");
 
@@ -13,10 +11,6 @@ $sord = $_GET['sord']; // get the direction
 $idProv = $_GET['id'];
 $oper = $_REQUEST['oper'];
 $id = $_POST['id'];
-$prov = $_REQUEST['prov'];
-
-if(!empty($prov))
-	$idProv = $prov;
 
 if(!$sidx) $sidx =1;
 if(!$limit) $limit =1;
@@ -29,39 +23,28 @@ mysql_select_db($database) or die("Error conecting to db.");
 	if($oper === "add")
 		{
                       $NombreProv = $_REQUEST['Proveedor'];
-                      $query= "                     INSERT INTO empleadosAR (Identificacion,
-													IdProveedor,
-													Nombre,
-													CUIL,
-													Condicion,
-													F931,
-													Poliza,
-													VigenciaDesde,
-													VigenciaHasta,
-													SeguroDeVida,
-													ReciboSueldo,
-													Repeticion,
-													Indemnidad,
-													AptoIngreso,
-													Responsable,
-													CentroCosto) VALUES(".$_REQUEST['Identificacion'].",".$idProv.",'".$_REQUEST['Nombre']."','".$_REQUEST['CUIL']."','".
-													$_REQUEST['Condicion']."','".$_REQUEST['F931']."','".$_REQUEST['Poliza']."','".$_REQUEST['VigenciaDesde']."','".
-													$_REQUEST['VigenciaHasta']."','".$_REQUEST['SeguroDeVida']."','".$_REQUEST['ReciboSueldo']."','".$_REQUEST['Repeticion']."','".
-													$_REQUEST['Indemnidad']."','".$_REQUEST['AptoIngreso']."','".$_REQUEST['Responsable']."','".$_REQUEST['CentroCosto']."')";
+                      $query= "                      INSERT INTO empleadosAR (IdProveedor,
+																																							Nombre,
+																																							CUIL,
+																																							Condicion,
+																																							F931,
+																																							Poliza,
+																																							VigenciaDesde,
+																																							VigenciaHasta,
+																																							SeguroDeVida,
+																																							ReciboSueldo,
+																																							Repeticion,
+																																							Indemnidad,
+																																							AptoIngreso,
+																																							Responsable,
+																																							CentroCosto) VALUES(".$idProv.",'".$_REQUEST['Nombre']."','".$_REQUEST['CUIL']."','".
+																																							$_REQUEST['Condicion']."','".$_REQUEST['F931']."','".$_REQUEST['Poliza']."','".$_REQUEST['VigenciaDesde']."','".
+																																							$_REQUEST['VigenciaHasta']."','".$_REQUEST['SeguroDeVida']."','".$_REQUEST['ReciboSueldo']."','".$_REQUEST['Repeticion']."','".
+																																							$_REQUEST['Indemnidad']."','".$_REQUEST['AptoIngreso']."','".$_REQUEST['Responsable']."','".$_REQUEST['CentroCosto']."')";
 
                       $result=mysql_query($query);
-                      $idEmpleado = $_REQUEST['Identificacion'];
-										  if($debug == 1) var_dump($query);
-											$result2 = mysql_query("SELECT c.* FROM camposCustom c join empresas e on(c.idEmpresa = e.IdEmpresa) where e.IdEmpresa = '".$_SESSION['empresa']."'" );
-											//Insertamos valores de campos custom
-											while($row = mysql_fetch_array($result2,MYSQL_ASSOC)) 
-											{
-																$sql .= "INSERT into valoresCampos values(".$row['idcampo'].",".$row['idEmpresa'].",'".$_REQUEST[$row['nombreCampo']]."',".$idEmpleado.")"	 ;
-																mysql_query($sql);
-											}
+										  var_dump($query);
                       //$row = mysql_fetch_array($result,MYSQL_ASSOC); SOLO PARA SELECT
-                      //Aca llamar a funcion chequea alerta con param idEmpleado
-                      chequeaAlerta($idEmpleado);
 		}
 	else if($oper === "edit") 
 		{
@@ -83,31 +66,14 @@ mysql_select_db($database) or die("Error conecting to db.");
 																											 CentroCosto   = '".$_REQUEST['CentroCosto']  ."' 
                       				WHERE Identificacion = ".$id;
                       $result=mysql_query($query);
-                      if($debug == 1) var_dump($query);
-                      $result2 = mysql_query("SELECT c.* FROM camposCustom c join empresas e on(c.idEmpresa = e.IdEmpresa) where e.IdEmpresa = '".$_SESSION['empresa']."'" );
-											//Actualizamos valores de campos custom
-											while($row = mysql_fetch_array($result2,MYSQL_ASSOC)) 
-											{
-																$sql .= "update valoresCampos set valorCampo = '".$_REQUEST[$row['nombreCampo']]."'
-																					where idcampo = ".$row['idcampo']	 ;
-																mysql_query($sql);
-											}
-											//Aca llamar a funcion chequea alerta con param idEmpleado
-											chequeaAlerta($id);
+                      var_dump($query);
 		}
 	else if($oper === "del") 
 		{
                       $idCountry = $_REQUEST['id'];
                       $query= "DELETE FROM empleadosAR WHERE Identificacion = ".$id;
                       $result=mysql_query($query);
-                      if($debug == 1) var_dump($query);
-                      $result2 = mysql_query("SELECT c.* FROM camposCustom c join empresas e on(c.idEmpresa = e.IdEmpresa) where e.IdEmpresa = '".$_SESSION['empresa']."'" );
-											//Borramos valores de campos custom
-											while($row = mysql_fetch_array($result2,MYSQL_ASSOC)) 
-											{
-																$sql .= "delete from valoresCampos where idcampo = ".$row['idcampo']	 ;
-																mysql_query($sql);
-											}
+                      var_dump($query);
 		}
 
 	else
@@ -138,108 +104,8 @@ mysql_select_db($database) or die("Error conecting to db.");
 				$responce->rows[$i]['id']=$row[Identificacion];
 				$responce->rows[$i]['cell']=array($row[Identificacion],$row[Nombre], $row[CUIL],$row[Condicion],$row[F931],$row[Poliza],$row[VigenciaDesde],$row[VigenciaHasta],$row[SeguroDeVida],$row[ReciboSueldo],
 																		$row[Repeticion],$row[Indemnidad],$row[AptoIngreso],$row[Responsable],$row[CentroCosto]);
-        $result2 = mysql_query("SELECT v.* FROM valoresCampos v join empresas e on(c.idEmpresa = e.IdEmpresa) where e.IdEmpresa = '".$_SESSION['empresa']."' AND v.empleados_Identificacion = ".$row[Identificacion]." order by v.idcampo" );
-			  //Seleccionamos valores de campos custom
-				while($row2 = mysql_fetch_array($result2,MYSQL_ASSOC)) 
-				{
-									array_push($responce->rows[$i]['cell'],$row2['valorCampo']);
-				}
 				$i++;
 			}
        			echo json_encode($responce);
 		}
-
-function chequeaAlerta($idempleado)
-{
-			$alerta = false;
-			$error = '';
-			$SQL = "SELECT * FROM empleadosAR WHERE Identificacion = ".$idempleado; 
-			$result = mysql_query( $SQL ) or die("Couldn?t execute query.".mysql_error());
-			while($row = mysql_fetch_array($result,MYSQL_ASSOC)) 
-			{
-				//$responce->rows[$i]['cell']=array($row[Identificacion],$row[Nombre], $row[CUIL],$row[Condicion],$row[F931],$row[Poliza],$row[VigenciaDesde],$row[VigenciaHasta],$row[SeguroDeVida],$row[ReciboSueldo],$row[Repeticion],$row[Indemnidad],$row[AptoIngreso],$row[Responsable],$row[CentroCosto]);
-				$proveedor = $row['IdProveedor'];
-				$nombre = $row[Nombre];
-				$identificacion = $row[Identificacion];
-				$cuil = $row[CUIL];
-				
-				if($row[F931] == 'NO')
-				{
-						$alerta = true;
-						$error .= 'Falta F931'."\n";
-				}			
-				if($row[SeguroDeVida] == 'NO')
-				{
-						$alerta = true;
-						$error .= 'Falta Seguro de vida'."\n";
-				}						
-				if($row[Poliza] == 'NO')
-				{
-						$alerta = true;
-						$error .= 'Falta Poliza'."\n";
-				}						
-				if($row[ReciboSueldo] == 'NO')
-				{
-						$alerta = true;
-						$error .= 'Falta Recibo de sueldo'."\n";
-				}		
- 				if($row[Repetición] == 'NO')
-				{
-						$alerta = true;
-						$error .= 'Falta Claúsula de repetición'."\n";
-				}		
-				if($row[Indemnidad] == 'NO')
-				{
-						$alerta = true;
-						$error .= 'Falta Indemnidad'."\n";
-				}						
-        $result2 = mysql_query("SELECT v.*,c* FROM valoresCampos v join camposCustom c on(v.idcampo = c.idcampo) join empresas e on(c.idEmpresa = e.IdEmpresa) where e.IdEmpresa = '".$_SESSION['empresa']."' AND v.empleados_Identificacion = ".$row[Identificacion]." order by v.idcampo" );
-			  //Seleccionamos valores de campos custom
-				while($row2 = mysql_fetch_array($result2,MYSQL_ASSOC)) 
-				{
-									if($row2['valorCampo'] == 'NO')
-									{
-											$alerta = true;
-											$error .= 'Falta '.$row2['labelCampo'];
-									}			
-				}
-			}
-			
-			if($alerta)
-			{
-								$error = "Documentación faltante para: " . $nombre .", Identificación: ".$identificacion.", CUIL: ".$cuil."\n".$error; 
-								$error = nl2br($error);
-								envioAlerta($proveedor,$error); //Enviar el mail a la alerta configurada
-		  }
-}
-
-function envioAlerta($proveedor,$error)
-{
-	    $SQL = "SELECT * FROM receptoresAlertas a join proveedores p on(a.proveedores_IdProveedor = p.IdProveedor)
-				where proveedores_IdProveedor = ". $proveedor; 
-			$result = mysql_query( $SQL ) or die("Couldn?t execute query.".mysql_error());
-      $recipients = array();	
-			while($row = mysql_fetch_array($result,MYSQL_ASSOC)) 
-			{
-					array_push($recipients,$row['mailReceptor']);
-			}
-			$mail_from = 'Alerta sistema <alertas@aycabogados.com.ar';
-			$mail_subject = 'Alerta de Falta de datos';
-			$body = $error;
-			foreach($recipients as $recipient)
-					{			
-						$headers  = "MIME-Version: 1.0" . "\r\n";
-						$headers .= "Content-type: text/html; charset=utf-8" . "\r\n";
-						$headers .= "Return-Path: $mail_from" ." \r\n";
-						$headers .= "Reply-To: $mail_from" . "\r\n";
-						$headers .= "From: $mail_from" . "\r\n";
-						
-						
-						//mail($recipient, $mail_subject, $body, $headers);
-						if(mail($recipient, $mail_subject, $body, $headers))
-							print "<font face='arial' size='2'>Mail enviado a $recipient...</font><br>";
-						else
-							print "<font face='arial' size='2'>No se pudo enviar mail a $recipient...</font><br>";
-					}
-}
 ?>
