@@ -1,0 +1,11 @@
+<?php
+        include('Cabecera_csv.php');
+?>
+  
+</head>
+
+<body>
+<div class="ui-jqgrid ui-widget ui-widget-content ui-corner-all">
+  <h2 align="center">CSV import to database</h2>
+  <table align="center" width="99%" height="90%" border="0"><tr><td valign="top">
+</div>  	
