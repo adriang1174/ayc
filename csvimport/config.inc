@@ -10,8 +10,8 @@ ini_set("track_errors", 1);
 
 //database settings
 define("DB_HOST"    , 'localhost');
-define("DB_LOGIN"   , 'root');
-define("DB_PASSWORD", 'ave*2012');
+define("DB_LOGIN"   , 'dbayc');
+define("DB_PASSWORD", 'ayc*123');
 define("DB_NAME"    , 'mydb');
 
 

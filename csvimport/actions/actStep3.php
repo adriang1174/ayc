@@ -17,7 +17,7 @@ if( !empty($options['file_name']) && !empty($options['mapping']) ) //1st and 2nd
   $fQuickCSV->make_temporary = false;
   $fQuickCSV->table_exists = true;
   $fQuickCSV->field_separate_char = $options['field_separate_char'];
-  $fQuickCSV->encoding = $options['encoding'];
+  $fQuickCSV->encoding = "UTF8";
   $fQuickCSV->field_enclose_char = $options['field_enclose_char'];
   $fQuickCSV->field_escape_char = $options['field_escape_char'];
   $fQuickCSV->arr_csv_columns = $_SESSION['data']['mapping'];
