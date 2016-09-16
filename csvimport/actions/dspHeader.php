@@ -9,7 +9,7 @@ jQuery(document).ready(function(){
 </head>
 
 <?php
-        include(ROOT_DIR .'auditoria/ayc/csvimport/menu_csv.php');
+        include(ROOT_DIR .'ayc/csvimport/menu_csv.php');
 ?>
 <div class="ui-jqgrid ui-widget ui-widget-content ui-corner-all">
   <h2 align="center">CSV import to database</h2>
